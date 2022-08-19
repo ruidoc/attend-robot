@@ -1,0 +1,26 @@
+{
+  "name": "attend-robot",
+  "version": "1.0.0",
+  "description": "钉钉打卡提醒小工具",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ruidoc/attend-robot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ruidoc/attend-robot/issues"
+  },
+  "homepage": "https://github.com/ruidoc/attend-robot#readme",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.5",
+    "express": "^4.18.1"
+  }
+}
