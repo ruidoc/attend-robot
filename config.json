@@ -1,5 +1,6 @@
 {
   "appkey": "",
   "appsecret": "",
-  "rebot_token": ""
+  "rebot_token": "",
+  "port": 8080
 }

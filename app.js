@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const config = requre("./config");
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -20,6 +21,6 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).send(err.inner || err.stack);
 });
 
-app.listen(8080, () => {
-  console.log(`listen to http://localhost:8080`);
+app.listen(config.port || 8080, () => {
+  console.log(`listen to http://localhost:${config.port || 8080}`);
 });

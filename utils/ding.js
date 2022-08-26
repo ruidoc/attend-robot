@@ -2,9 +2,7 @@ const dayjs = require("dayjs");
 const { config } = require("process");
 const dingApi = require("./http.js");
 
-const userIdList = ["xxx"]; // userid 列表
-
-const getAttendStatus = () => {
+const getAttendStatus = (userIdList) => {
   let body = {
     workDateFrom: dayjs().startOf("day").format("YYYY-MM-DD HH:mm:ss"),
     workDateTo: dayjs().endOf("day").format("YYYY-MM-DD HH:mm:ss"),
@@ -18,13 +16,13 @@ const getAttendStatus = () => {
 // 获取上班未打卡用户
 const getOnUids = (attendList) =>
   attendList
-    .filter((row) => row.checkType == "OnDuty" && row.timeResult == "NotSigned")
+    .filter((row) => row.checkType == "OnDuty")
     .map((row) => row.userId);
 
 // 下班未打卡用户
 const getOffUids = (attendList) =>
   attendList
-    .filter((row) => row.checkType == "OffDut" && row.timeResult == "NotSigned")
+    .filter((row) => row.checkType == "OffDut")
     .map((row) => row.userId);
 
 const sendNotify = (msg, atuids = []) => {
