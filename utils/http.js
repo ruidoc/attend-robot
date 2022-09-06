@@ -1,6 +1,6 @@
 const axios = require("axios");
 const source = axios.CancelToken.source();
-var { fatchToken, dingToken } = require("./token");
+var { fetchToken, dingToken } = require("./token");
 
 // 创建实例，设置通用配置
 const instance = axios.create({
@@ -15,11 +15,17 @@ const instance = axios.create({
 instance.interceptors.request.use(async (config) => {
   config.params = config.params || {};
   if (!config.params.access_token) {
-    let catoken = JSON.parse(dingToken.get());
-    if (Date.now() - catoken.expire >= 0) {
-      console.log("钉钉 token 过期");
-      // source.cancel('token已失效')
-      await fatchToken();
+    let catoken = {};
+    if (dingToken.get()) {
+      catoken = JSON.parse(dingToken.get());
+      if (Date.now() - catoken.expire >= 0) {
+        console.log("钉钉 token 过期");
+        // source.cancel('token已失效')
+        await fetchToken();
+        catoken = JSON.parse(dingToken.get());
+      }
+    } else {
+      await fetchToken();
       catoken = JSON.parse(dingToken.get());
     }
     config.params.access_token = catoken.token;

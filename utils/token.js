@@ -2,7 +2,7 @@ var fs = require("fs");
 var path = require("path");
 var axios = require("axios");
 
-var config = require("../config.json");
+var config = require("../config");
 var catch_dir = path.resolve(__dirname, "../", "catch");
 
 class DingToken {

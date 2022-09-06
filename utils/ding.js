@@ -1,7 +1,9 @@
 const dayjs = require("dayjs");
-const { config } = require("process");
+const axios = require("axios");
+const config = require("../config");
 const dingApi = require("./http.js");
 
+// 获取打卡状态
 const getAttendStatus = (userIdList) => {
   let body = {
     workDateFrom: dayjs().startOf("day").format("YYYY-MM-DD HH:mm:ss"),
@@ -13,13 +15,13 @@ const getAttendStatus = (userIdList) => {
   return dingApi.post(`/attendance/list`, body);
 };
 
-// 获取上班未打卡用户
+// 上班打卡用户
 const getOnUids = (attendList) =>
   attendList
     .filter((row) => row.checkType == "OnDuty")
     .map((row) => row.userId);
 
-// 下班未打卡用户
+// 下班打卡用户
 const getOffUids = (attendList) =>
   attendList
     .filter((row) => row.checkType == "OffDut")
@@ -37,7 +39,7 @@ const sendNotify = (msg, atuids = []) => {
     },
   };
   // API 发送消息
-  axios.post(`${baseURL}/robot/send`, infos, {
+  axios.post(`https://oapi.dingtalk.com/robot/send`, infos, {
     params: { access_token: config.rebot_token },
   });
 };
