@@ -15,6 +15,23 @@ const getAttendStatus = (userIdList) => {
   return dingApi.post(`/attendance/list`, body);
 };
 
+// 获取请假状态
+const getLeaveStatus = async (userid_list, offset = 0) => {
+  let body = {
+    start_time: dayjs().startOf("day").valueOf(),
+    end_time: dayjs().endOf("day").valueOf(),
+    userid_list: userid_list.join(), // userid 列表
+    offset,
+    size: 20,
+  };
+  let res = await dingApi.post(`/topapi/attendance/getleavestatus`, body);
+  if (res.errcode != 0) {
+    return res;
+  } else {
+    return res.result.leave_status.map((row) => row.userid);
+  }
+};
+
 // 上班打卡用户
 const getOnUids = (attendList) =>
   attendList
@@ -27,6 +44,7 @@ const getOffUids = (attendList) =>
     .filter((row) => row.checkType == "OffDut")
     .map((row) => row.userId);
 
+// 发送通知消息
 const sendNotify = (msg, atuids = []) => {
   // 消息模版配置
   let infos = {
@@ -39,7 +57,7 @@ const sendNotify = (msg, atuids = []) => {
     },
   };
   // API 发送消息
-  axios.post(`https://oapi.dingtalk.com/robot/send`, infos, {
+  dingApi.post(`/robot/send`, infos, {
     params: { access_token: config.rebot_token },
   });
 };
@@ -49,4 +67,5 @@ module.exports = {
   getOnUids,
   getOffUids,
   sendNotify,
+  getLeaveStatus,
 };

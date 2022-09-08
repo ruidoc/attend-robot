@@ -5,6 +5,7 @@ var config = require("../config");
 
 const {
   getAttendStatus,
+  getLeaveStatus,
   getOnUids,
   getOffUids,
   sendNotify,
@@ -22,6 +23,12 @@ router.get("/attend-send", async (req, res, next) => {
     if (alluids.length == 0) {
       return res.status(400).send("必须在 config.js 中设置 userId");
     }
+    // 获取请假状态
+    let leaveRes = await getLeaveStatus(alluids);
+    if (leaveRes.errcode) {
+      return res.status(500).send(leaveRes);
+    }
+    alluids = alluids.filter((uid) => !leaveRes.includes(uid));
     // 获取打卡状态
     let attendRes = await getAttendStatus(alluids);
     if (attendRes.errcode != 0) {
@@ -29,7 +36,7 @@ router.get("/attend-send", async (req, res, next) => {
     }
     let attendList = attendRes.recordresult;
     // 是否9点前（上班时间）
-    let isOnDuty = dayjs().isBefore(dayjs().hour(10).minute(0));
+    let isOnDuty = dayjs().isBefore(dayjs().hour(9).minute(0));
     // 是否18点后（下班时间）
     let isOffDuty = dayjs().isAfter(dayjs().hour(18).minute(0));
     if (isOnDuty) {
@@ -39,6 +46,7 @@ router.get("/attend-send", async (req, res, next) => {
         // 未打卡用户
         let txuids = alluids.filter((r) => !uids.includes(r));
         sendNotify("上班没打卡，小心扣钱！", txuids);
+        return res.send("上班提醒成功");
       }
     } else if (isOffDuty) {
       // 已打卡用户
@@ -47,6 +55,7 @@ router.get("/attend-send", async (req, res, next) => {
         // 未打卡用户
         let txuids = alluids.filter((r) => !uids.includes(r));
         sendNotify("下班没打卡，小心扣钱！", txuids);
+        return res.send("下班提醒成功");
       }
     } else {
       return res.send("不在打卡时间");

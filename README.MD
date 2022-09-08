@@ -37,4 +37,4 @@ $ pm2 start --watch
 | rebot_token | 钉钉机器人 token，必填 |   无   |
 |    port     |      应用启动端口      |  8080  |
 
-更详细的功能实现，请看[博客](https://juejin.cn/post/7136108565986541598/)
+更详细的功能实现，请看[博客](https://juejin.cn/post/7136108565986541598/)。
