@@ -13,7 +13,7 @@ const getUserIds = async () => {
   return [];
 };
 
-module.exports = {
+export default {
   appkey,
   appsecret,
   rebot_token,

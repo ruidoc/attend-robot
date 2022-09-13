@@ -1,10 +1,10 @@
-const dayjs = require("dayjs");
-const axios = require("axios");
-const config = require("../config");
-const dingApi = require("./http.js");
+import dayjs from "dayjs";
+import axios from "axios";
+import config from "../config.js";
+import dingApi from "./http.js";
 
 // 获取打卡状态
-const getAttendStatus = (userIdList) => {
+export const getAttendStatus = (userIdList) => {
   let body = {
     workDateFrom: dayjs().startOf("day").format("YYYY-MM-DD HH:mm:ss"),
     workDateTo: dayjs().endOf("day").format("YYYY-MM-DD HH:mm:ss"),
@@ -16,7 +16,7 @@ const getAttendStatus = (userIdList) => {
 };
 
 // 获取请假状态
-const getLeaveStatus = async (userid_list, offset = 0) => {
+export const getLeaveStatus = async (userid_list, offset = 0) => {
   let body = {
     start_time: dayjs().startOf("day").valueOf(),
     end_time: dayjs().endOf("day").valueOf(),
@@ -33,19 +33,19 @@ const getLeaveStatus = async (userid_list, offset = 0) => {
 };
 
 // 上班打卡用户
-const getOnUids = (attendList) =>
+export const getOnUids = (attendList) =>
   attendList
     .filter((row) => row.checkType == "OnDuty")
     .map((row) => row.userId);
 
 // 下班打卡用户
-const getOffUids = (attendList) =>
+export const getOffUids = (attendList) =>
   attendList
     .filter((row) => row.checkType == "OffDut")
     .map((row) => row.userId);
 
 // 发送通知消息
-const sendNotify = (msg, atuids = []) => {
+export const sendNotify = (msg, atuids = []) => {
   // 消息模版配置
   let infos = {
     msgtype: "text",
@@ -60,12 +60,4 @@ const sendNotify = (msg, atuids = []) => {
   dingApi.post(`/robot/send`, infos, {
     params: { access_token: config.rebot_token },
   });
-};
-
-module.exports = {
-  getAttendStatus,
-  getOnUids,
-  getOffUids,
-  sendNotify,
-  getLeaveStatus,
 };

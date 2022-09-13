@@ -1,15 +1,16 @@
-var express = require("express");
-var router = express.Router();
-var dayjs = require("dayjs");
-var config = require("../config");
+import express from "express";
+import dayjs from "dayjs";
+import config from "../config.js";
 
-const {
+import {
   getAttendStatus,
   getLeaveStatus,
   getOnUids,
   getOffUids,
   sendNotify,
-} = require("../utils/ding");
+} from "../utils/ding.js";
+
+var router = express.Router();
 
 router.get("/", (req, res, next) => {
   res.send("钉钉API");
@@ -67,4 +68,4 @@ router.get("/attend-send", async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;

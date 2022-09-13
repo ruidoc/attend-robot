@@ -1,21 +1,21 @@
-var fs = require("fs");
-var path = require("path");
-var axios = require("axios");
+import fs from "fs";
+import path from "path";
+import axios from "axios";
+import config from "../config.js";
 
-var config = require("../config");
-var catch_dir = path.resolve(__dirname, "../", "catch");
+var catch_dir = path.resolve("./", "catch");
 
-class DingToken {
-  get() {
+export const dingToken = {
+  get: () => {
     let res = fs.readFileSync(`${catch_dir}/ding_token.json`);
     return res.toString() || null;
-  }
-  set(token) {
+  },
+  set: (token) => {
     fs.writeFileSync(`${catch_dir}/ding_token.json`, token);
-  }
-}
+  },
+};
 
-const fetchToken = async () => {
+export const fetchToken = async () => {
   try {
     let params = {
       appkey: config.appkey,
@@ -30,15 +30,10 @@ const fetchToken = async () => {
         token: result.data.access_token,
         expire: Date.now() + result.data.expires_in * 1000,
       });
-      new DingToken().set(token_str);
+      dingToken.set(token_str);
       return token_str;
     }
   } catch (error) {
     console.log(error);
   }
-};
-
-module.exports = {
-  dingToken: new DingToken(),
-  fetchToken,
 };

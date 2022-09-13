@@ -1,14 +1,16 @@
-const express = require("express");
+import express from "express";
+import bodyParser from "body-parser";
+import cors from "cors";
+import DingRoute from "./router/ding.js";
+import config from "./config.js";
+
 const app = express();
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const config = require("./config");
 
 app.use(bodyParser.json());
 app.use(cors());
 
 // 路由配置
-app.use("/ding", require("./router/ding"));
+app.use("/ding", DingRoute);
 
 // 捕获404
 app.use((req, res, next) => {

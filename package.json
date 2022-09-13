@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "钉钉打卡提醒小工具",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

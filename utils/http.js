@@ -1,6 +1,6 @@
-const axios = require("axios");
+import axios from "axios";
+import { fetchToken, dingToken } from "./token.js";
 const source = axios.CancelToken.source();
-var { fetchToken, dingToken } = require("./token");
 
 // 创建实例，设置通用配置
 const instance = axios.create({
@@ -58,4 +58,4 @@ const handleError = async (res) => {
   }
 };
 
-module.exports = instance;
+export default instance;
